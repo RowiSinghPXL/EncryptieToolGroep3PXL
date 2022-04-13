@@ -94,7 +94,7 @@ namespace ClassLibrary1
             return encrypted;
         }
 
-        public static string DecryptStringFromBytes_Aes(byte[] cipherText, byte[] Key, byte[] IV)
+        public static (string, bool) DecryptStringFromBytes_Aes(byte[] cipherText, byte[] Key, byte[] IV)
         {
             // Check arguments.
             if (cipherText == null || cipherText.Length <= 0)
@@ -131,11 +131,11 @@ namespace ClassLibrary1
                             //wrong key
                             try
                             {
-                                plaintext = srDecrypt.ReadToEnd();
+                               return (plaintext = srDecrypt.ReadToEnd(), true);
                             }
                             catch (CryptographicException e)
                             {
-                                plaintext = "Er ging iets mis tijdens het decrypteren, kijk of je de juist key hebt gebruikt.";
+                               return(plaintext = "Er ging iets mis tijdens het decrypteren, kijk of je de juist key hebt gebruikt.", false);
                             }
                             
 
@@ -145,7 +145,7 @@ namespace ClassLibrary1
                 }
             }
 
-            return plaintext;
+            //return plaintext;
         }
 
 
