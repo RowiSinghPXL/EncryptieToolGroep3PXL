@@ -26,6 +26,7 @@ namespace EncryptieToolGroep3
     /// </summary>
     public partial class MainWindow : Window
     {
+        public string EncryptOrDecryptThis { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +41,10 @@ namespace EncryptieToolGroep3
             //string str = Convert.ToBase64String(ClassLibrary1.RandomGenerator.GenerateRandomNumber(32));
             //TxtUserOutput.Text = str;
          
+            if(TxtUserInput.Text == string.Empty)
+            {
+                TxtUserInput.Text = EncryptOrDecryptThis;
+            }
             
             if(LstAesCred.SelectedIndex >= 0)
             {
@@ -144,10 +149,12 @@ namespace EncryptieToolGroep3
             if (openFileDialog.ShowDialog() == true)
             {
                 string txtFileTextsss = File.ReadAllText(openFileDialog.FileName);
+                EncryptOrDecryptThis = txtFileTextsss;
                 if (openFileDialog.FileName.Contains('\\'))
                 {
                     var helpArr = openFileDialog.FileName.Split('\\');
                     string fileName = helpArr[helpArr.Length - 1];
+                    
                     MessageBox.Show("File " + fileName + " selected.");
                 }
                 else
@@ -156,6 +163,8 @@ namespace EncryptieToolGroep3
                 }
                 
             }
+
+            
                
         }
 
@@ -168,7 +177,8 @@ namespace EncryptieToolGroep3
                 if(TxtUserOutput.Text != null)
                 {
                     byte[] ciperText = Convert.FromBase64String(TxtUserOutput.Text);
-                    TxtUserInput.Text = AES.DecryptStringFromBytes_Aes(ciperText, selectedKey, selectedIV);
+                    (string text, bool result) = AES.DecryptStringFromBytes_Aes(ciperText, selectedKey, selectedIV);
+                    TxtUserInput.Text = text;
                 }
                 
                 
@@ -176,6 +186,68 @@ namespace EncryptieToolGroep3
             else
             {
                 MessageBox.Show("Selecteer een key.");
+            }
+        }
+
+        private void BtnWriteToFile_Click(object sender, RoutedEventArgs e)
+        {
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"; // or just "txt files (*.txt)|*.txt" if you only want to save text files
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == true)
+            {
+                using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName))
+                {
+                    if (LstAesCred.SelectedIndex >= 0)
+                    {
+                        byte[] selectedKey = Convert.FromBase64String(CsvAESKeys.Keys[LstAesCred.SelectedIndex].Key);
+                        byte[] selectedIV = Convert.FromBase64String(CsvAESKeys.Keys[LstAesCred.SelectedIndex].Iv);
+                        writer.WriteAsync(Convert.ToBase64String(AES.EncryptStringToBytes_Aes(EncryptOrDecryptThis, selectedKey, selectedIV)));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selecteer een key.");
+                    }
+                    writer.Close();
+                }
+            }
+
+        }
+
+        private void BtnWriteToFileDecrypt_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt"; // or just "txt files (*.txt)|*.txt" if you only want to save text files
+            //saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == true)
+            {
+                using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName))
+                {
+                    if (LstAesCred.SelectedIndex >= 0)
+                    {
+                        byte[] selectedKey = Convert.FromBase64String(CsvAESKeys.Keys[LstAesCred.SelectedIndex].Key);
+                        byte[] selectedIV = Convert.FromBase64String(CsvAESKeys.Keys[LstAesCred.SelectedIndex].Iv);
+                        byte[] cipherText = Convert.FromBase64String(EncryptOrDecryptThis);
+                        (string text, bool result) = AES.DecryptStringFromBytes_Aes(cipherText, selectedKey, selectedIV);
+                        writer.WriteAsync(text);
+                        if (!result)
+                        {
+                            MessageBox.Show("Er ging iets mis tijdens het decrypteren.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selecteer een key.");
+                    }
+                    writer.Close();
+                }
             }
         }
 

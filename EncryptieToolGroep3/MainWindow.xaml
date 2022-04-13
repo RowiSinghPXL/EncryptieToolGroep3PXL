@@ -16,6 +16,8 @@
         <ListBox x:Name="LstAesCred" Margin="400,31,124,252" SelectionChanged="LstAesCred_SelectionChanged" />
         <Button x:Name="BtnGetTextFile" Content="TextFile" Margin="52,339,636,34" Click="BtnGetTextFile_Click"/>
         <Button x:Name="BtnDecrypt" Content="Decrypt" Margin="193,148,505,222" Click="BtnDecrypt_Click"/>
+        <Button x:Name="BtnWriteToFile" Content="Save Encryption" Margin="183,336,500,34" Click="BtnWriteToFile_Click"/>
+        <Button x:Name ="BtnWriteToFileDecrypt" Content="Save Decryption" Margin="334,339,344,29" Click="BtnWriteToFileDecrypt_Click"/>
 
     </Grid>
 </Window>
