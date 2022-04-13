@@ -12,6 +12,7 @@ namespace ClassLibrary1.Helpers
     {
         public static string FileKeysAES { get; } = @"AesKey.csv";
         public static string FullPath { get; } = Directory.Path + @"\" + FileKeysAES;
+        public static List<AESKey> Keys { get; set; }
         public static void InitAESKeyFile()
         {
             string headerFile = "Key;Iv";
@@ -49,6 +50,55 @@ namespace ClassLibrary1.Helpers
                 throw new ApplicationException("Fout bij het opslaan van de key en iv", ex);
             }
         }
+
+        public static List<string> GetAESKeyRecords()
+        {
+            List<string> keys = new List<string>();
+         
+                    foreach(var r in Keys)
+                    {
+                        keys.Add($"Key: {r.Key} - Iv: {r.Iv}");
+                    }
+                    return keys;
+                        
+            
+            
+
+
+        }
+
+        private static List<TSource> ToList<TSource>(this IEnumerable<TSource> source)
+        {
+              return new List<TSource>(source);
+            
+           
+        }
+
+        public static void InitKeyRecords()
+        {
+            List<AESKey> keys = new List<AESKey>();
+            using (var reader = new StreamReader(FullPath))
+            {
+                using (var csv = new CsvReader(reader, CultureInfo.CurrentCulture))
+                {
+                    var records = csv.GetRecords<AESKey>();
+
+                    foreach(var r in records)
+                    {
+                        keys.Add(new AESKey { Key = r.Key, Iv = r.Iv });
+                    }
+
+                    Keys = keys;
+
+                }
+            }
+          
+        }
+
+
+
+
+
 
 
 
