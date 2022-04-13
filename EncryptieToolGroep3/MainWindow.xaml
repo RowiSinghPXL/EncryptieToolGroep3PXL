@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EncryptieToolGroep3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Encryption tool" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
+        <TextBox Name="TxtUserInput" Text="" TextWrapping="Wrap" Margin="52,72,562,288"/>
+        <Label Content="Input text:" Margin="52,42,678,367"/>
+        <Button Name="BtnEncrypt" Content="Encrypt" Margin="52,151,628,222" Click="BtnEncrypt_Click"/>
+        <TextBox x:Name="TxtUserOutput" Text="" TextWrapping="Wrap" Margin="52,247,562,121"/>
+        <Label Content="Output text:" Margin="52,217,678,192"/>
+        <Button x:Name="BtnGenerateKey" Content="Generate key" Margin="400,247,288,126" Click="BtnGenerateKey_Click"/>
+        <ListBox x:Name="LstAesCred" Margin="400,31,124,252" SelectionChanged="LstAesCred_SelectionChanged" />
+        <Button x:Name="BtnGetTextFile" Content="TextFile" Margin="52,339,636,34" Click="BtnGetTextFile_Click"/>
+        <Button x:Name="BtnDecrypt" Content="Decrypt" Margin="193,148,505,222" Click="BtnDecrypt_Click"/>
 
     </Grid>
 </Window>
