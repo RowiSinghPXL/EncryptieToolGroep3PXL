@@ -142,7 +142,21 @@ namespace EncryptieToolGroep3
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
-                TxtUserInput.Text = File.ReadAllText(openFileDialog.FileName);
+            {
+                string txtFileTextsss = File.ReadAllText(openFileDialog.FileName);
+                if (openFileDialog.FileName.Contains('\\'))
+                {
+                    var helpArr = openFileDialog.FileName.Split('\\');
+                    string fileName = helpArr[helpArr.Length - 1];
+                    MessageBox.Show("File " + fileName + " selected.");
+                }
+                else
+                {
+                    MessageBox.Show("File " + openFileDialog.FileName + " selected.");
+                }
+                
+            }
+               
         }
 
         private void BtnDecrypt_Click(object sender, RoutedEventArgs e)
