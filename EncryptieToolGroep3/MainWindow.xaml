@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EncryptieToolGroep3"
         mc:Ignorable="d"
         Title="Encryption tool" Height="450" Width="800" Loaded="Window_Loaded">
-    <Grid>
+    <!--<Grid>
         <TextBox Name="TxtUserInput" Text="" TextWrapping="Wrap" Margin="52,72,562,288"/>
         <Label Content="Input text:" Margin="52,42,678,367"/>
         <Button Name="BtnEncrypt" Content="Encrypt" Margin="52,151,628,222" Click="BtnEncrypt_Click"/>
@@ -20,5 +20,82 @@
         <Button x:Name ="BtnWriteToFileDecrypt" Content="Save Decryption" Margin="334,339,344,29" Click="BtnWriteToFileDecrypt_Click"/>
         <TextBox x:Name="TxtKeyName" Text="" TextWrapping="Wrap" Margin="538,246,81,126"/>
 
+    </Grid>-->
+    <!--updated layout-->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            
+        </Grid.RowDefinitions>
+
+        <!--Header-->
+        <StackPanel Grid.ColumnSpan="3" Background="#F05A28" Orientation="Horizontal">
+            <Image Source="Images/ency_logo.png" Height="90" Margin="5"/>
+            <TextBlock Text="Aes encryptie" 
+                 FontSize="30"
+                 FontWeight="ExtraBold" 
+                 Foreground="White"
+                 VerticalAlignment="Bottom"
+                 Margin="20"/>
+            <TextBlock Text="Version 1.0" 
+                 Foreground="#333333"
+                 VerticalAlignment="Bottom"
+                 Margin="0 0 0 25"/>
+        </StackPanel>
+
+        
+        <Grid Grid.Row="1"
+          x:Name="customerListGrid"
+          Background="DarkOrange">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Vertical">
+                <Label Content="Key titel" FontWeight="Bold" HorizontalAlignment="Center"></Label>
+                <TextBox x:Name="TxtKeyName"></TextBox>
+                <Button Click="BtnGenerateKey_Click" x:Name="BtnGenerateKey" Margin="10 10 10 10" >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Generate key" Margin="5 5 5 5"/>
+                        
+                    </StackPanel>
+                </Button>
+
+                
+            </StackPanel>
+            
+
+         
+            <ListBox x:Name="LstAesCred" Grid.Row="1" Background="LightGray">
+                
+            </ListBox>
+        </Grid>
+
+        
+        <StackPanel Grid.Row="1" Grid.Column="1" Background="DarkSlateGray" >
+            <StackPanel Grid.Row="1" Grid.Column="1" Background="DimGray">
+                <Label Content="Encrypteer deze tekst:" FontWeight="Bold"></Label>
+                <TextBox Name="TxtUserInput" Text="" Margin="10"/>
+                <Button Name="BtnEncrypt" Margin="200 0" Content="Encrypteer" Click="BtnEncrypt_Click"></Button>
+                <Label Content="Geencrypteerde tekst:" FontWeight="Bold"></Label>
+                <TextBox x:Name="TxtUserOutput" Text="" Margin="10"/>
+                
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Background="DarkSlateGray">
+                <Label Content="Encrypteer/decrypteer text bestanden:" FontWeight="Bold"></Label>
+                <Button x:Name="BtnGetTextFile" Margin="200 10" Content="Select file" Click="BtnGetTextFile_Click"></Button>
+                <Button x:Name="BtnWriteToFile" Margin="200 10" Content="Encrypt" Click="BtnWriteToFile_Click"></Button>
+                <Button x:Name ="BtnWriteToFileDecrypt" Margin="200 10" Content="Decrypt" Click="BtnWriteToFileDecrypt_Click"></Button>
+            </StackPanel>
+        </StackPanel>
+        
     </Grid>
 </Window>
