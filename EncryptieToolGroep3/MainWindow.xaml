@@ -18,6 +18,7 @@
         <Button x:Name="BtnDecrypt" Content="Decrypt" Margin="193,148,505,222" Click="BtnDecrypt_Click"/>
         <Button x:Name="BtnWriteToFile" Content="Save Encryption" Margin="183,336,500,34" Click="BtnWriteToFile_Click"/>
         <Button x:Name ="BtnWriteToFileDecrypt" Content="Save Decryption" Margin="334,339,344,29" Click="BtnWriteToFileDecrypt_Click"/>
+        <TextBox x:Name="TxtKeyName" Text="" TextWrapping="Wrap" Margin="538,246,81,126"/>
 
     </Grid>
 </Window>

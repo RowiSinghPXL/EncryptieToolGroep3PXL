@@ -121,8 +121,8 @@ namespace EncryptieToolGroep3
             string keyStr = Convert.ToBase64String(key);
             string ivStr = Convert.ToBase64String(iv);
 
-            CsvAESKeys.AESKeyaddRecord(keyStr, ivStr);
-            CsvAESKeys.Keys.Add(new ClassLibrary1.Model.AESKey { Key = keyStr, Iv = ivStr });
+            CsvAESKeys.AESKeyaddRecord(TxtKeyName.Text, keyStr, ivStr);
+            CsvAESKeys.Keys.Add(new ClassLibrary1.Model.AESKey {Name = TxtKeyName.Text, Key = keyStr, Iv = ivStr });
             LstAesCred.ItemsSource = CsvAESKeys.GetAESKeyRecords();
         }
 

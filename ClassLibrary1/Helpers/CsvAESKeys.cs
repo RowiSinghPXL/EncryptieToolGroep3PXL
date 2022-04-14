@@ -15,7 +15,7 @@ namespace ClassLibrary1.Helpers
         public static List<AESKey> Keys { get; set; }
         public static void InitAESKeyFile()
         {
-            string headerFile = "Key;Iv";
+            string headerFile = "Name;Key;Iv";
             //var csvPath = Directory.Path + @"\" + FileKeysAES;
 
 
@@ -36,13 +36,13 @@ namespace ClassLibrary1.Helpers
             }
         }
 
-        public static void AESKeyaddRecord(string key, string iv)
+        public static void AESKeyaddRecord(string name, string key, string iv)
         {
             try
             {
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(FullPath, true))
                 {
-                    file.WriteLine(key + ";" + iv);
+                    file.WriteLine(name + ";" + key + ";" + iv);
                 }
             }
             catch(Exception ex)
@@ -57,7 +57,7 @@ namespace ClassLibrary1.Helpers
          
                     foreach(var r in Keys)
                     {
-                        keys.Add($"Key: {r.Key} - Iv: {r.Iv}");
+                        keys.Add($"Name: {r.Name} - Key: {r.Key} - Iv: {r.Iv}");
                     }
                     return keys;
                         
@@ -67,12 +67,7 @@ namespace ClassLibrary1.Helpers
 
         }
 
-        private static List<TSource> ToList<TSource>(this IEnumerable<TSource> source)
-        {
-              return new List<TSource>(source);
-            
-           
-        }
+       
 
         public static void InitKeyRecords()
         {
@@ -85,7 +80,7 @@ namespace ClassLibrary1.Helpers
 
                     foreach(var r in records)
                     {
-                        keys.Add(new AESKey { Key = r.Key, Iv = r.Iv });
+                        keys.Add(new AESKey {Name = r.Name, Key = r.Key, Iv = r.Iv });
                     }
 
                     Keys = keys;
@@ -94,8 +89,6 @@ namespace ClassLibrary1.Helpers
             }
           
         }
-
-
 
 
 
