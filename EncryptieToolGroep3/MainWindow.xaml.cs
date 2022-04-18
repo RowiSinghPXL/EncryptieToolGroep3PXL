@@ -27,11 +27,13 @@ namespace EncryptieToolGroep3
     public partial class MainWindow : Window
     {
         public string EncryptOrDecryptThis { get; set; }
+        public string FileName { get; set; }
         public MainWindow()
         {
             InitializeComponent();
             ClassLibrary1.Helpers.Directory.InitDirectory();
             ClassLibrary1.Helpers.CsvAESKeys.InitAESKeyFile();
+            CsvRsaKeys3.InitRSAKeyFile();
             
         }
 
@@ -115,6 +117,12 @@ namespace EncryptieToolGroep3
 
         private void BtnGenerateKey_Click(object sender, RoutedEventArgs e)
         {
+            //if (CsvAESKeys.FilePath.Equals(""))
+            //{
+            //    MessageBox("Create")
+            //}
+
+
             var key = RandomGenerator.GenerateRandomNumber(32); //32bytes = 128 bits, (key size = 128,192,256 bits)
             var iv = RandomGenerator.GenerateRandomNumber(16);
 
@@ -129,7 +137,9 @@ namespace EncryptieToolGroep3
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             CsvAESKeys.InitKeyRecords();
+            CsvRsaKeys3.InitKeyRecords();
             LstAesCred.ItemsSource = CsvAESKeys.GetAESKeyRecords();
+            LstRsaCred.ItemsSource = CsvRsaKeys3.GetRSAKeyRecords();
         }
 
       
@@ -249,6 +259,113 @@ namespace EncryptieToolGroep3
                     writer.Close();
                 }
             }
+        }
+
+        private void BtnGenerateRSAKey_Click(object sender, RoutedEventArgs e)
+        {
+            bool iterationCheckInt = int.TryParse(TxtRsaIteration.Text, out int iteration);
+            string pwd = TxtRsaKeypwd.Text;
+            var Rsa = new RsaHelper();
+            string privateKey = Rsa.ExportPrivateKeyString(iteration, pwd);
+            string publicKey = Rsa.ExportPublicKeyString();
+
+
+            //CsvRsaKeysUpdated.AESKeyaddRecord(TxtKeyName.Text, keyStr, ivStr);
+            //CsvRsaKeysUpdated.Keys.Add(new ClassLibrary1.Model.AESKey {Name = TxtKeyName.Text, Key = keyStr, Iv = ivStr });
+            //LstAesCred.ItemsSource = CsvRsaKeysUpdated.GetAESKeyRecords();
+
+            CsvRsaKeys3.RSAKeyaddRecord(TxtRsakeyname.Text, publicKey, privateKey);
+            CsvRsaKeys3.Keys.Add(new ClassLibrary1.Model.RSAKey { Naam = TxtRsakeyname.Text, PrivateKey = privateKey, PublicKey = publicKey });
+            LstRsaCred.ItemsSource = CsvRsaKeys3.GetRSAKeyRecords();
+
+
+
+        }
+
+        private void BtnEncryptRsa_Click(object sender, RoutedEventArgs e)
+        {
+            string tekst = TxtUserInputRsa.Text;
+            var rsa = new RsaHelper();
+            //rsa.ImportPublicKey();
+
+
+            if (LstRsaCred.SelectedIndex >= 0)
+            {
+                byte[] selectedPublicKey = Convert.FromBase64String(CsvRsaKeys3.Keys[LstRsaCred.SelectedIndex].PublicKey);
+                byte[] selectedPrivateKey = Convert.FromBase64String(CsvRsaKeys3.Keys[LstRsaCred.SelectedIndex].PrivateKey);
+                
+
+                rsa.ImportPublicKey(selectedPublicKey);
+                var userInput = Convert.FromBase64String(TxtUserInputRsa.Text);
+                var encryption = rsa.Encrypt(userInput);
+                TxtUserOutputRsa.Text = Convert.ToBase64String(encryption);
+            }
+            else
+            {
+                MessageBox.Show("Selecteer een key.");
+            }
+        }
+
+        private void BtnGetTextFileRsa_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string txtFileTextsss = File.ReadAllText(openFileDialog.FileName);
+                FileName = openFileDialog.FileName;
+                EncryptOrDecryptThis = txtFileTextsss;
+                if (openFileDialog.FileName.Contains('\\'))
+                {
+                    var helpArr = openFileDialog.FileName.Split('\\');
+                    string fileName = helpArr[helpArr.Length - 1];
+
+                    MessageBox.Show("File " + fileName + " selected.");
+                }
+                else
+                {
+                    MessageBox.Show("File " + openFileDialog.FileName + " selected.");
+                }
+
+            }
+        }
+
+        private void BtnWriteToFileRsa_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"; // or just "txt files (*.txt)|*.txt" if you only want to save text files
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == true)
+            {
+                using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName))
+                {
+                    if (LstRsaCred.SelectedIndex >= 0)
+                    {
+                        byte[] privateKey = Convert.FromBase64String(CsvRsaKeys3.Keys[LstRsaCred.SelectedIndex].PrivateKey);
+                        byte[] publicKey = Convert.FromBase64String(CsvRsaKeys3.Keys[LstRsaCred.SelectedIndex].PublicKey);
+                        var rsa = new RsaHelper();
+                        rsa.ImportPublicKey(publicKey);
+
+                        //var bytesz = Convert.FromBase64String(EncryptOrDecryptThis);
+                        byte[] bytes = System.IO.File.ReadAllBytes(FileName);
+                        var encrypted = rsa.Encrypt(bytes);
+                        writer.WriteAsync(Convert.ToBase64String(encrypted));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selecteer een key.");
+                    }
+                    writer.Close();
+                }
+            }
+        }
+
+        private void BtnWriteToFileDecryptRsa_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
 

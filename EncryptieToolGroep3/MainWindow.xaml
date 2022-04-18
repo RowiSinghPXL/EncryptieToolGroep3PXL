@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EncryptieToolGroep3"
         mc:Ignorable="d"
-        Title="Encryption tool" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="Encryption tool" Height="600" Width="1000" Loaded="Window_Loaded">
     <!--<Grid>
         <TextBox Name="TxtUserInput" Text="" TextWrapping="Wrap" Margin="52,72,562,288"/>
         <Label Content="Input text:" Margin="52,42,678,367"/>
@@ -24,9 +24,12 @@
     <!--updated layout-->
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition />
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -49,9 +52,23 @@
                  Margin="0 0 0 25"/>
         </StackPanel>
 
-        
+        <StackPanel Grid.ColumnSpan="3" Grid.Column="3" Background="YellowGreen" Orientation="Horizontal">
+            <!--<Image Source="Images/ency_logo.png" Height="90" Margin="5"/>-->
+            <TextBlock Text="Rsa encryptie" 
+                 FontSize="30"
+                 FontWeight="ExtraBold" 
+                 Foreground="White"
+                 VerticalAlignment="Bottom"
+                 Margin="20"/>
+            <TextBlock Text="Version 1.0" 
+                 Foreground="#333333"
+                 VerticalAlignment="Bottom"
+                 Margin="0 0 0 25"/>
+        </StackPanel>
+
+
         <Grid Grid.Row="1"
-          x:Name="customerListGrid"
+          x:Name="keysGrid"
           Background="DarkOrange">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -79,23 +96,81 @@
             </ListBox>
         </Grid>
 
-        
+
+        <Grid Grid.Row="1" Grid.Column="3"
+          x:Name="keysGridd"
+          Background="DarkOrange">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Vertical">
+                <Label Content="Key titel" FontWeight="Bold" HorizontalAlignment="Center"></Label>
+                <TextBox x:Name="TxtRsakeyname"></TextBox>
+                <WrapPanel>
+                    <StackPanel Width="100" Margin="10 0 0 0">
+                        <Label Content="paswoord"></Label>
+                        <TextBox x:Name="TxtRsaKeypwd"></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="100" Margin="10 0 0 0">
+                        <Label Content="iteratie"></Label>
+                        <TextBox x:Name="TxtRsaIteration"></TextBox>
+                    </StackPanel>
+                </WrapPanel>
+                <Button  x:Name="BtnGenerateRSAKey" Margin="10 10 10 10" Click="BtnGenerateRSAKey_Click" >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Generate key" Margin="5 5 5 5"/>
+
+                    </StackPanel>
+                </Button>
+
+
+            </StackPanel>
+
+
+
+            <ListBox x:Name="LstRsaCred" Grid.Row="1" Background="LightGray">
+
+            </ListBox>
+        </Grid>
+
+
         <StackPanel Grid.Row="1" Grid.Column="1" Background="DarkSlateGray" >
             <StackPanel Grid.Row="1" Grid.Column="1" Background="DimGray">
                 <Label Content="Encrypteer deze tekst:" FontWeight="Bold"></Label>
                 <TextBox Name="TxtUserInput" Text="" Margin="10"/>
-                <Button Name="BtnEncrypt" Margin="200 0" Content="Encrypteer" Click="BtnEncrypt_Click"></Button>
+                <Button Name="BtnEncrypt" Margin="10 0" Content="Encrypteer" Click="BtnEncrypt_Click"></Button>
                 <Label Content="Geencrypteerde tekst:" FontWeight="Bold"></Label>
                 <TextBox x:Name="TxtUserOutput" Text="" Margin="10"/>
                 
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1" Background="DarkSlateGray">
                 <Label Content="Encrypteer/decrypteer text bestanden:" FontWeight="Bold"></Label>
-                <Button x:Name="BtnGetTextFile" Margin="200 10" Content="Select file" Click="BtnGetTextFile_Click"></Button>
-                <Button x:Name="BtnWriteToFile" Margin="200 10" Content="Encrypt" Click="BtnWriteToFile_Click"></Button>
-                <Button x:Name ="BtnWriteToFileDecrypt" Margin="200 10" Content="Decrypt" Click="BtnWriteToFileDecrypt_Click"></Button>
+                <Button x:Name="BtnGetTextFile" Margin="10 10" Content="Select file" Click="BtnGetTextFile_Click"></Button>
+                <Button x:Name="BtnWriteToFile" Margin="10 10" Content="Encrypt" Click="BtnWriteToFile_Click"></Button>
+                <Button x:Name ="BtnWriteToFileDecrypt" Margin="10 10" Content="Decrypt" Click="BtnWriteToFileDecrypt_Click"></Button>
             </StackPanel>
         </StackPanel>
-        
+
+
+        <StackPanel Grid.Row="1" Grid.Column="4" Background="DarkSlateGray" >
+            <StackPanel Grid.Row="1" Grid.Column="4" Background="DimGray">
+                <Label Content="Encrypteer deze tekst:" FontWeight="Bold"></Label>
+                <TextBox Name="TxtUserInputRsa" Text="" Margin="10"/>
+                <Button Name="BtnEncryptRsa" Margin="10 0" Content="Encrypteer" Click="BtnEncryptRsa_Click" ></Button>
+                <Label Content="Geencrypteerde tekst:" FontWeight="Bold"></Label>
+                <TextBox x:Name="TxtUserOutputRsa" Text="" Margin="10"/>
+
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Background="DarkSlateGray">
+                <Label Content="Encrypteer/decrypteer text bestanden:" FontWeight="Bold"></Label>
+                <Button x:Name="BtnGetTextFileRsa" Margin="10 10" Content="Select file" Click="BtnGetTextFileRsa_Click" ></Button>
+                <Button x:Name="BtnWriteToFileRsa" Margin="10 10" Content="Encrypt" Click="BtnWriteToFileRsa_Click" ></Button>
+                <Button x:Name ="BtnWriteToFileDecryptRsa" Margin="10 10" Content="Decrypt" Click="BtnWriteToFileDecryptRsa_Click" ></Button>
+            </StackPanel>
+        </StackPanel>
+
     </Grid>
 </Window>
